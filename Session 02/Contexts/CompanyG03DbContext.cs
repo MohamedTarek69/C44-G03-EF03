@@ -23,12 +23,12 @@ namespace Session_02.Contexts
             //modelBuilder.ApplyConfiguration(new DepartmentConfigrations());
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            modelBuilder.Entity<Emploee>()
-                        .HasOne(E => E.ManagedDepartment)
-                        .WithOne(D => D.Manager)
-                        .HasForeignKey<Department>(D => D.DeptManagerId)
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired(true);
+            //modelBuilder.Entity<Emploee>()
+            //            .HasOne(E => E.ManagedDepartment)
+            //            .WithOne(D => D.Manager)
+            //            .HasForeignKey<Department>(D => D.DeptManagerId)
+            //            .OnDelete(DeleteBehavior.NoAction)
+            //            .IsRequired(true);
 
             //modelBuilder.Entity<Department>()
             //            .HasOne(D => D.Manager)
@@ -38,7 +38,41 @@ namespace Session_02.Contexts
             //modelBuilder.Entity<Emploee>()
             //            .HasOne<Department>()
             //            .WithOne()
-            //            .HasForeignKey<Department>(D => D.DeptManagerId);
+            //            .HasForeignKey<Department>(D => D.ManagerId);
+
+            //modelBuilder.Entity<Emploee>()
+            //            .HasOne(E => E.EmployeeDepartment)
+            //            .WithMany(D => D.Employees)
+            //            .HasForeignKey(E => E.DeptId)
+            //            .IsRequired()
+            //            .OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<Department>()
+            //            .HasMany(D => D.Employees)
+            //            .WithOne(E => E.EmployeeDepartment)
+            //            .HasForeignKey(E => E.DeptId)
+            //            .IsRequired()
+            //            .OnDelete(DeleteBehavior.NoAction);
+
+            //modelBuilder.Entity<Student>()
+            //            .HasMany(S => S.Courses)
+            //            .WithMany(C => C.Students)
+            //            .UsingEntity(RT => RT.ToTable("Hamada"));
+
+            modelBuilder.Entity<CourseStudent>()
+                        .HasKey(SC => new { SC.StdId, SC.CrsId });
+
+            modelBuilder.Entity<Student>()
+                        .HasMany(S => S.StudentsCourses)
+                        .WithOne(SC => SC.Student)
+                        .HasForeignKey(SC => SC.StdId)
+                        .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Course>()
+                        .HasMany(C => C.CourseStudents)
+                        .WithOne(SC => SC.Course)
+                        .HasForeignKey(SC => SC.CrsId)
+                        .OnDelete(DeleteBehavior.NoAction);
 
         }
 
@@ -48,8 +82,11 @@ namespace Session_02.Contexts
             optionsBuilder.UseSqlServer("Server = DESKTOP-JF6NGA5;Database = CompanyG03DB;Trusted_Connection = True;TrustServerCertificate= true");
         }
 
-        //public DbSet<Emploee> Employees { get; set; }
-        //public DbSet<Department> Departments { get; set; }
+        public DbSet<Emploee> Employees { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
+
 
     }
 }

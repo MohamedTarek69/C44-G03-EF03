@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Session_02.Contexts;
 
@@ -11,9 +12,11 @@ using Session_02.Contexts;
 namespace Session_02.Migrations
 {
     [DbContext(typeof(CompanyG03DbContext))]
-    partial class CompanyG03DbContextModelSnapshot : ModelSnapshot
+    [Migration("20250920153007_MakeRealtionshipOneToManyBetweenEmployeeAndDepartmentWork")]
+    partial class MakeRealtionshipOneToManyBetweenEmployeeAndDepartmentWork
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,41 +24,6 @@ namespace Session_02.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Session_02.Models.Course", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("Session_02.Models.CourseStudent", b =>
-                {
-                    b.Property<int>("StdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CrsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("int");
-
-                    b.HasKey("StdId", "CrsId");
-
-                    b.HasIndex("CrsId");
-
-                    b.ToTable("CourseStudent");
-                });
 
             modelBuilder.Entity("Session_02.Models.Department", b =>
                 {
@@ -134,45 +102,6 @@ namespace Session_02.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("Session_02.Models.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("Session_02.Models.CourseStudent", b =>
-                {
-                    b.HasOne("Session_02.Models.Course", "Course")
-                        .WithMany("CourseStudents")
-                        .HasForeignKey("CrsId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Session_02.Models.Student", "Student")
-                        .WithMany("StudentsCourses")
-                        .HasForeignKey("StdId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("Session_02.Models.Department", b =>
                 {
                     b.HasOne("Session_02.Models.Emploee", "Manager")
@@ -218,11 +147,6 @@ namespace Session_02.Migrations
                     b.Navigation("EmployeeDepartment");
                 });
 
-            modelBuilder.Entity("Session_02.Models.Course", b =>
-                {
-                    b.Navigation("CourseStudents");
-                });
-
             modelBuilder.Entity("Session_02.Models.Department", b =>
                 {
                     b.Navigation("Employees");
@@ -231,11 +155,6 @@ namespace Session_02.Migrations
             modelBuilder.Entity("Session_02.Models.Emploee", b =>
                 {
                     b.Navigation("ManagedDepartment");
-                });
-
-            modelBuilder.Entity("Session_02.Models.Student", b =>
-                {
-                    b.Navigation("StudentsCourses");
                 });
 #pragma warning restore 612, 618
         }

@@ -5,7 +5,7 @@
 namespace Session_02.Migrations
 {
     /// <inheritdoc />
-    public partial class MakeRealtionshipOneToOneBetweenEmplyeeAndDepartment : Migration
+    public partial class MakeRealtionshipOneToOneBetweenEmployeeAndDepartment : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,7 +44,8 @@ namespace Session_02.Migrations
                 table: "Departments",
                 column: "DeptManagerId",
                 principalTable: "Employees",
-                principalColumn: "EmpId");
+                principalColumn: "EmpId",
+                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />

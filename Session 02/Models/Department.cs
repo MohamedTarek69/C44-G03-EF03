@@ -13,16 +13,21 @@ namespace Session_02.Models
         public string DeptName { get; set; }
         public DateOnly DateOfCreation { get; set; }
         public int Serial { get; set; }
+        //[ForeignKey("Manager")]
+        [ForeignKey(nameof(Manager))]
+        public int DeptManagerId { get; set; }
+        //public int ManagerId { get; set; }
+        //public int ManagerDeptId { get; set; }
+        //public int EmployeeId { get; set; }
+        //public int EmployeeDeptId { get; set; }
 
-        //[ForeignKey(nameof(Manager))]
-        //public int DeptManagerId { get; set; }
-        ////public int ManagerDeptId { get; set; }
-        ////public int EmployeeId { get; set; }
-        ////public int EmployeeDeptId { get; set; }
-
-        //// Navigational Property [one]
-        //// EF Core : Department Must Has one Employee To Manage it [Total Participation]
-        //public Emploee Manager { get; set; } = null!;
+        // Navigational Property [one]
+        // EF Core : Department Must Has one Employee To Manage it [Total Participation]
+        [InverseProperty(nameof(Emploee.ManagedDepartment))]
+        public Emploee Manager { get; set; } = null!;
+        // Navigational Property [many]
+        [InverseProperty(nameof(Emploee.EmployeeDepartment))]
+        public ICollection<Emploee> Employees { get; set; } = new HashSet<Emploee>();
 
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,6 @@ namespace Session_02.Models
         [Required]
         [Column("EmployeeName", TypeName = "varchar")]
         [StringLength(50,MinimumLength =3,ErrorMessage ="Name Of Employee Must Be Between 3 and 50 Char")]
-        
         public string EmpName { get; set; }
         [Column("EmployeeSalary", TypeName = "decimal(10,2)")]
         public decimal Salary { get; set; }
@@ -26,22 +26,32 @@ namespace Session_02.Models
         [AllowedValues(25, 30, 22, 50, 60)]
         [DeniedValues(25, 30, 22, 50, 60)]
         public int Age { get; set; }
-
         [Phone]
         [DataType(DataType.PhoneNumber)]
         [Required]
         public required string PhoneNumber { get; set; }
-
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
         [EmailAddress]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+        [NotMapped]
+        public decimal Deduction { get; set; }
+        // Navigational Property [one]
+        // EF Core : Employee May Manage one Department [Partial Participation]
+        [InverseProperty(nameof(Department.Manager))]
+        public Department? ManagedDepartment { get; set; }
+        public Address EmpAddress { get; set; }
 
-        //// Navigational Property [one]
-        //// EF Core : Employee May Manage one Department [Partial Participation]
-        //public Department? ManagedDepartment { get; set; }
+        [ForeignKey(nameof(EmployeeDepartment))]
+        public int? DeptId { get; set; } 
+
+        // Navigational Property [one]
+        // Ef Core : Employee Must work on one Department [Total Participation]
+        [InverseProperty(nameof(Department.Employees))]
+        public Department EmployeeDepartment { get; set; } = null!;
+
+
     }
 
 }

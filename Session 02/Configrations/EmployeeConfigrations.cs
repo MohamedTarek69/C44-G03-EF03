@@ -27,6 +27,8 @@ namespace Session_02.Configrations
                         .HasColumnType("varchar")
                         .HasMaxLength(50)
                         .IsRequired(false);
+
+            modelBuilder.OwnsOne(E => E.EmpAddress, Address => Address.WithOwner());
         }
     }
 }

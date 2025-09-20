@@ -12,8 +12,8 @@ using Session_02.Contexts;
 namespace Session_02.Migrations
 {
     [DbContext(typeof(CompanyG03DbContext))]
-    [Migration("20250917191305_MakeRealtionshipOneToOneBetweenEmplyeeAndDepartment")]
-    partial class MakeRealtionshipOneToOneBetweenEmplyeeAndDepartment
+    [Migration("20250920151728_MakeRealtionshipOneToOneBetweenEmployeeAndAddress")]
+    partial class MakeRealtionshipOneToOneBetweenEmployeeAndAddress
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,10 +102,38 @@ namespace Session_02.Migrations
                     b.HasOne("Session_02.Models.Emploee", "Manager")
                         .WithOne("ManagedDepartment")
                         .HasForeignKey("Session_02.Models.Department", "DeptManagerId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("Session_02.Models.Emploee", b =>
+                {
+                    b.OwnsOne("Session_02.Models.Address", "EmpAddress", b1 =>
+                        {
+                            b1.Property<int>("EmploeeEmpId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Country")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Street")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("EmploeeEmpId");
+
+                            b1.ToTable("Employees");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmploeeEmpId");
+                        });
+
+                    b.Navigation("EmpAddress")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Session_02.Models.Emploee", b =>
