@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Session_02.Contexts;
 
@@ -11,9 +12,11 @@ using Session_02.Contexts;
 namespace Session_02.Migrations
 {
     [DbContext(typeof(CompanyG03DbContext))]
-    partial class CompanyG03DbContextModelSnapshot : ModelSnapshot
+    [Migration("20250920174247_MakeRealtionshipOneToManyBetweenCourseAndTopic")]
+    partial class MakeRealtionshipOneToManyBetweenCourseAndTopic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,8 +65,6 @@ namespace Session_02.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("inst_ID", "Course_ID");
-
-                    b.HasIndex("Course_ID");
 
                     b.ToTable("Course_Instructor");
                 });
@@ -219,25 +220,6 @@ namespace Session_02.Migrations
                     b.Navigation("Topics");
                 });
 
-            modelBuilder.Entity("Session_02.Models.Course_Inst", b =>
-                {
-                    b.HasOne("Session_02.Models.Course", "Courses")
-                        .WithMany("CourseInstructors")
-                        .HasForeignKey("Course_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Session_02.Models.Instructor", "Instructors")
-                        .WithMany("InstructorsCourses")
-                        .HasForeignKey("inst_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Courses");
-
-                    b.Navigation("Instructors");
-                });
-
             modelBuilder.Entity("Session_02.Models.Department", b =>
                 {
                     b.HasOne("Session_02.Models.Instructor", "InstructorManageDept")
@@ -290,8 +272,6 @@ namespace Session_02.Migrations
 
             modelBuilder.Entity("Session_02.Models.Course", b =>
                 {
-                    b.Navigation("CourseInstructors");
-
                     b.Navigation("CourseStudents");
                 });
 
@@ -304,8 +284,6 @@ namespace Session_02.Migrations
 
             modelBuilder.Entity("Session_02.Models.Instructor", b =>
                 {
-                    b.Navigation("InstructorsCourses");
-
                     b.Navigation("ManagedDepartment")
                         .IsRequired();
                 });

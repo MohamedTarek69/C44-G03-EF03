@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -9,20 +10,27 @@ namespace Session_02.Models
 {
     internal class Department
     {
-        public int DeptId { get; set; }
-        public string DeptName { get; set; }
-        public DateOnly DateOfCreation { get; set; }
-        public int Serial { get; set; }
+        [Key]
+        public int Dept_Id { get; set; }
 
-        //[ForeignKey(nameof(Manager))]
-        //public int DeptManagerId { get; set; }
-        ////public int ManagerDeptId { get; set; }
-        ////public int EmployeeId { get; set; }
-        ////public int EmployeeDeptId { get; set; }
+        [Column("Dept_Name")]
+        public string? Name { get; set; }
 
-        //// Navigational Property [one]
-        //// EF Core : Department Must Has one Employee To Manage it [Total Participation]
-        //public Emploee Manager { get; set; } = null!;
+        [Column(TypeName = "datetime2")]
+        [DataType(DataType.Date)]
+        public DateTime HiringDate { get; set; }
+        ///////////////////////////////////////////////////////////////////////
+        [InverseProperty(nameof(Student.StudentDepartment))]
+        public ICollection<Student> Students { get; set; }
+        /////////////////////////////////////////////////////////////////////
+        [InverseProperty(nameof(Instructor.InstructorDepartment))]
+        public ICollection<Instructor> Instructors { get; set; } = new HashSet<Instructor>();
+        //////////////////////////////////////////////////////////////////////
+        [ForeignKey(nameof(InstructorManageDept))]
+        public int? Ins_ID { get; set; }
+        public Instructor InstructorManageDept { get; set; } = null!;
+
+
 
     }
 }

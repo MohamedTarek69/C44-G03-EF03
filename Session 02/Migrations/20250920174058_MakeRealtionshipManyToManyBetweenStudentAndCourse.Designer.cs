@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Session_02.Contexts;
 
@@ -11,9 +12,11 @@ using Session_02.Contexts;
 namespace Session_02.Migrations
 {
     [DbContext(typeof(CompanyG03DbContext))]
-    partial class CompanyG03DbContextModelSnapshot : ModelSnapshot
+    [Migration("20250920174058_MakeRealtionshipManyToManyBetweenStudentAndCourse")]
+    partial class MakeRealtionshipManyToManyBetweenStudentAndCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,12 +43,7 @@ namespace Session_02.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("CourseName");
 
-                    b.Property<int>("Top_ID")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("Top_ID");
 
                     b.ToTable("Courses");
                 });
@@ -63,8 +61,6 @@ namespace Session_02.Migrations
 
                     b.HasKey("inst_ID", "Course_ID");
 
-                    b.HasIndex("Course_ID");
-
                     b.ToTable("Course_Instructor");
                 });
 
@@ -79,18 +75,11 @@ namespace Session_02.Migrations
                     b.Property<DateTime>("HiringDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("Ins_ID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Dept_Name");
 
                     b.HasKey("Dept_Id");
-
-                    b.HasIndex("Ins_ID")
-                        .IsUnique()
-                        .HasFilter("[Ins_ID] IS NOT NULL");
 
                     b.ToTable("Departments");
                 });
@@ -107,15 +96,9 @@ namespace Session_02.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Dept_ID")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("HourRateBouns")
                         .HasColumnType("decimal(10,2)")
                         .HasColumnName("HourRateBouns");
-
-                    b.Property<int>("InstructorDepartmentDept_Id")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -128,8 +111,6 @@ namespace Session_02.Migrations
                         .HasColumnName("EmployeeSalary");
 
                     b.HasKey("Ins_Id");
-
-                    b.HasIndex("InstructorDepartmentDept_Id");
 
                     b.ToTable("Instructors");
                 });
@@ -208,56 +189,6 @@ namespace Session_02.Migrations
                     b.ToTable("Topics");
                 });
 
-            modelBuilder.Entity("Session_02.Models.Course", b =>
-                {
-                    b.HasOne("Session_02.Models.Topic", "Topics")
-                        .WithMany("Courses")
-                        .HasForeignKey("Top_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Topics");
-                });
-
-            modelBuilder.Entity("Session_02.Models.Course_Inst", b =>
-                {
-                    b.HasOne("Session_02.Models.Course", "Courses")
-                        .WithMany("CourseInstructors")
-                        .HasForeignKey("Course_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Session_02.Models.Instructor", "Instructors")
-                        .WithMany("InstructorsCourses")
-                        .HasForeignKey("inst_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Courses");
-
-                    b.Navigation("Instructors");
-                });
-
-            modelBuilder.Entity("Session_02.Models.Department", b =>
-                {
-                    b.HasOne("Session_02.Models.Instructor", "InstructorManageDept")
-                        .WithOne("ManagedDepartment")
-                        .HasForeignKey("Session_02.Models.Department", "Ins_ID");
-
-                    b.Navigation("InstructorManageDept");
-                });
-
-            modelBuilder.Entity("Session_02.Models.Instructor", b =>
-                {
-                    b.HasOne("Session_02.Models.Department", "InstructorDepartment")
-                        .WithMany("Instructors")
-                        .HasForeignKey("InstructorDepartmentDept_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("InstructorDepartment");
-                });
-
             modelBuilder.Entity("Session_02.Models.Stud_Course", b =>
                 {
                     b.HasOne("Session_02.Models.Course", "Course")
@@ -290,34 +221,17 @@ namespace Session_02.Migrations
 
             modelBuilder.Entity("Session_02.Models.Course", b =>
                 {
-                    b.Navigation("CourseInstructors");
-
                     b.Navigation("CourseStudents");
                 });
 
             modelBuilder.Entity("Session_02.Models.Department", b =>
                 {
-                    b.Navigation("Instructors");
-
                     b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("Session_02.Models.Instructor", b =>
-                {
-                    b.Navigation("InstructorsCourses");
-
-                    b.Navigation("ManagedDepartment")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Session_02.Models.Student", b =>
                 {
                     b.Navigation("StudentsCourses");
-                });
-
-            modelBuilder.Entity("Session_02.Models.Topic", b =>
-                {
-                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Session_02.Configrations;
 using Session_02.Models;
 using System;
 using System.Collections.Generic;
@@ -17,39 +16,20 @@ namespace Session_02.Contexts
 
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            //modelBuilder.ApplyConfiguration(new EmployeeConfigrations());
-            //modelBuilder.ApplyConfiguration(new DepartmentConfigrations());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            modelBuilder.Entity<Emploee>()
-                        .HasOne(E => E.ManagedDepartment)
-                        .WithOne(D => D.Manager)
-                        .HasForeignKey<Department>(D => D.DeptManagerId)
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired(true);
-
-            //modelBuilder.Entity<Department>()
-            //            .HasOne(D => D.Manager)
-            //            .WithOne(E => E.ManagedDepartment)
-            //            .HasForeignKey<Department>(D => D.DeptManagerId);
-
-            //modelBuilder.Entity<Emploee>()
-            //            .HasOne<Department>()
-            //            .WithOne()
-            //            .HasForeignKey<Department>(D => D.DeptManagerId);
-
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Data Source = DESKTOP-JF6NGA5;Initial Catalog = CompanyDB1;Integraded Security = true");
-            optionsBuilder.UseSqlServer("Server = DESKTOP-JF6NGA5;Database = CompanyG03DB;Trusted_Connection = True;TrustServerCertificate= true");
-        }
+            optionsBuilder.UseSqlServer("Server = DESKTOP-JF6NGA5;Database = AssignmentEfCore02DB;Trusted_Connection = True;TrustServerCertificate= true");
 
-        //public DbSet<Emploee> Employees { get; set; }
-        //public DbSet<Department> Departments { get; set; }
+
+        }
+        
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Instructor> Instructors { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+        public DbSet<Course_Inst> Course_Insts { get; set; }
+        public DbSet<Stud_Course> Student_Courses { get; set; }
 
     }
 }
