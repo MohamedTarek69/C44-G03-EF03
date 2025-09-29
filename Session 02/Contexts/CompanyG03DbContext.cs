@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Session_02.Models;
+using Session_02.ITIModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

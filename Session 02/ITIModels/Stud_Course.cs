@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Session_02.Models
+namespace Session_02.ITIModels
 {
     [Table("Student_Course")]
     [PrimaryKey(nameof(CrsId), nameof(StdId))]
